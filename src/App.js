@@ -1,10 +1,12 @@
 import React from "react";
-import "./App.css";
 import UploadMsg from "./supabase/insert";
 import GetData from "./supabase/select"
+import Navbar from "./components/Navbar"
 
 function App() {
-  return null;
+  return (
+    <Navbar />
+  );
 }
 
 export default App;
