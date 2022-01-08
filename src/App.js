@@ -1,9 +1,10 @@
 import React from "react";
-import UploadMsg from "./supabase/insert";
-import GetData from "./supabase/select";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Home from "./components/Home";
+import Home from "./page/Home";
+import Contact from "./page/Contact"
+import About from "./page/About"
+import Start from "./page/Start"
 import { Routes, Route } from "react-router-dom"
 
 function App() {
@@ -17,6 +18,9 @@ function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/start" element={<Start />} />
         </Routes>
       </div>
       <Footer />

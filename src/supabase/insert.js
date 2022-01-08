@@ -2,6 +2,7 @@ import { supabase } from "./supabaseClient";
 import React from "react";
 
 export default function UploadMsg(message) {
+  const [error, setError] = React.useState()
   React.useEffect(() => {
     const insert = {
       msg: message,
@@ -12,11 +13,11 @@ export default function UploadMsg(message) {
         .from("form-result")
         .insert([insert]);
 
-      console.log(error);
+      setError(error);
     }
     // call the asyncronous function
     postData();
   }, [message]);
 
-  return null;
+  return error;
 }
