@@ -1,3 +1,4 @@
+import { useRef, useEffect } from "react";
 import Userpic from "./image/user.jpg";
 import GetData from "../supabase/select";
 import UploadMsg from "../supabase/insert";
@@ -5,9 +6,22 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { RiLoader3Line } from "react-icons/ri";
 import { IoCloudOffline } from "react-icons/io5";
+import { animateScroll } from "react-scroll";
+
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+}
 
 function Modalmsg() {
+  const msgRef = useRef(null);
+
   let [isOpen, setIsOpen] = useState(false);
+  const [msg, setMsg] = useState(null);
+  let error = UploadMsg(msg);
 
   function closeModal() {
     setIsOpen(false);
@@ -16,6 +30,15 @@ function Modalmsg() {
   function openModal() {
     setIsOpen(true);
   }
+
+  const msgSend = (event) => {
+    event.preventDefault();
+    const data = msgRef.current.value;
+    setMsg(data);
+    setTimeout(() => {
+      closeModal();
+    }, 2000);
+  };
 
   return (
     <>
@@ -71,22 +94,30 @@ function Modalmsg() {
                 >
                   Sampaikan isi hatimu
                 </Dialog.Title>
-                <div className="mt-4 flex flex-row">
-                  <button
-                    type="button"
-                    className="inline-flex mr-4 justify-center px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md hover:bg-orange-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={closeModal}
-                  >
-                    Kirim
-                  </button>
-                  <button
-                    type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-orange-600 bg-orange-100 border border-transparent rounded-md hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={closeModal}
-                  >
-                    Batal
-                  </button>
-                </div>
+                <form onSubmit={msgSend} action="">
+                  <textarea
+                    autoComplete="off"
+                    placeholder="Tulis pesan kamu di sini..."
+                    className="mt-2 p-2 w-full shadow appearance-none rounded-md transition border border-gray-300 focus:outline-none focus:border focus:border-blue-400"
+                    name="pesan"
+                    ref={msgRef}
+                  />
+                  <div className="mt-4 flex flex-row justify-end">
+                    <button
+                      type="submit"
+                      className="inline-flex mr-4 justify-center px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md hover:bg-orange-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    >
+                      Kirim
+                    </button>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center px-4 py-2 text-sm font-medium text-orange-600 bg-orange-100 border border-transparent rounded-md hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                      onClick={closeModal}
+                    >
+                      Batal
+                    </button>
+                  </div>
+                </form>
               </div>
             </Transition.Child>
           </div>
@@ -97,18 +128,27 @@ function Modalmsg() {
 }
 
 function Msgbox() {
-  // const data = "Jhagas makan banget"
-  // UploadMsg(data)
-
+  const showMsg = useRef(null);
   const [data, error, loading] = GetData();
+
+  useEffect(() => {
+    const scrollToBottom = () => {
+      animateScroll.scrollToBottom({
+        containerId: "messages",
+      });
+    };
+
+    scrollToBottom();
+  }, [data]);
 
   if (loading) {
     return (
       <div
         className="rounded-lg px-3 flex flex-col justify-center items-center"
         style={{
-          height: "calc(100% - 3.5rem)",
+          height: "calc(100% - 4.5rem)",
         }}
+        ref={showMsg}
       >
         <div>
           <RiLoader3Line className="animate-spin" size="32px" />
@@ -125,6 +165,7 @@ function Msgbox() {
         style={{
           height: "calc(100% - 3.5rem)",
         }}
+        id="messages"
       >
         {data.map((d) => {
           return (
@@ -158,6 +199,15 @@ function Msgbox() {
 }
 
 export default function Start() {
+  const PropUser = useRef();
+  const [height, setHeight] = useState(0);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    setHeight(PropUser.current.clientHeight);
+    setWidth(getWindowDimensions().width);
+  }, [height]);
+
   return (
     <div
       className="lg:flex lg:items-center lg:flex-row lg:justify-items-stretch w-full bg-gradient-to-b from-gray-100 to-orange-100"
@@ -165,42 +215,53 @@ export default function Start() {
         height: "calc(100vh - 1.75rem - 4rem)",
       }}
     >
-      <Userprop />
-      <div className="w-full lg:ml-4 lg:mr-8 lg:py-7 pt-4 pb-0 lg:h-full md:h-[57vh] sm:h-[40vh] h-[48vh]">
-        <div className="rounded-2xl bg-white lg:px-16 px-10 py-10 shadow-lg h-full">
-          <Msgbox />
-          <Modalmsg />
+      <div
+        ref={PropUser}
+        className="mx-3 px-10 py-8 lg:py-14 lg:-translate-y-10 lg:min-w-max lg:block sm:flex sm:flex-row sm:items-center block"
+      >
+        <img
+          src={Userpic}
+          width="30%"
+          className="rounded-full lg:w-40 md:w-32 max-w-sm shadow-md"
+          alt=""
+        />
+        <div className="lg:mt-5 lg:mb-5 lg:ml-0 sm:ml-8 ml-0 sm:mt-0 mt-5">
+          <h1 className="md:text-3xl sm:text-2xl text-xl font-bold">
+            Tulis pesan anonim untuk
+          </h1>
+          <h1 className="md:text-3xl sm:text-2xl text-xl font-bold text-orange-500">
+            Jhagas Hana Winaya
+          </h1>
+        </div>
+        <div>
+          <p className="text-gray-500 text-sm max-w-sm hidden lg:block">
+            Mahasiswa ITS jurusan fisika yang agak stress berkuliah dan
+            memikirkan masa depan. Bisa dibilang saya itu sering merasa gabut,
+            bahkan kalo sedang banyak tugaspun saya bisa merasa gabut. Ya
+            begitulah hidup, harus dinikmati..
+          </p>
         </div>
       </div>
-    </div>
-  );
-}
-
-function Userprop() {
-  return (
-    <div className="mx-3 px-10 py-8 lg:py-14 lg:-translate-y-10 lg:min-w-max lg:block sm:flex sm:flex-row sm:items-center block">
-      <img
-        src={Userpic}
-        width="30%"
-        className="rounded-full lg:w-40 md:w-32 max-w-sm shadow-md"
-        alt=""
-      />
-      <div className="lg:mt-5 lg:mb-5 lg:ml-0 sm:ml-8 ml-0 sm:mt-0 mt-5">
-        <h1 className="md:text-3xl sm:text-2xl text-xl font-bold">
-          Tulis pesan anonim untuk
-        </h1>
-        <h1 className="md:text-3xl sm:text-2xl text-xl font-bold text-orange-500">
-          Jhagas Hana Winaya
-        </h1>
-      </div>
-      <div>
-        <p className="text-gray-500 text-sm max-w-sm hidden lg:block">
-          Mahasiswa ITS jurusan fisika yang agak stress berkuliah dan memikirkan
-          masa depan. Bisa dibilang saya itu sering merasa gabut, bahkan kalo
-          sedang banyak tugaspun saya bisa merasa gabut. Ya begitulah hidup,
-          harus dinikmati..
-        </p>
-      </div>
+      {width >= 1024 ? (
+        <div className="w-full ml-4 mr-8 py-10 h-full max-h-full">
+          <div className="rounded-2xl bg-white lg:px-16 px-9 py-5 shadow-lg h-full">
+            <Msgbox />
+            <Modalmsg />
+          </div>
+        </div>
+      ) : (
+        <div
+          className="w-full lg:ml-4 lg:mr-8 lg:py-6 pt-4 pb-0 max-h-full -translate-y-3"
+          style={{
+            height: `calc(100vh - 5.75rem - 6rem - ${height}px)`,
+          }}
+        >
+          <div className="rounded-2xl bg-white lg:px-16 px-9 py-5 shadow-lg h-full">
+            <Msgbox />
+            <Modalmsg />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
