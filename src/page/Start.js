@@ -21,7 +21,7 @@ function Modalmsg() {
 
   let [isOpen, setIsOpen] = useState(false);
   const [msg, setMsg] = useState(null);
-  let error = UploadMsg(msg);
+  UploadMsg(msg);
 
   function closeModal() {
     setIsOpen(false);
