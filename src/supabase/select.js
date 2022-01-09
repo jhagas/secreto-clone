@@ -4,6 +4,7 @@ import React from "react";
 export default function GetData() {
   const [data, setData] = React.useState();
   const [error, setError] = React.useState();
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
 
@@ -14,13 +15,14 @@ export default function GetData() {
         let { data, error } = await supabase.from("form-result").select("*");
         setData(data);
         setError(error);
+        setLoading(false);
       }
-    , 500)
+    , 2000)
 
     // Purge state when outside of /start route
     return () => clearTimeout(fetch);
    // call the asyncronous function
-  }, [data]);
+  }, [data, error]);
 
-  return [ data, error ];
+  return [ data, error, loading ];
 }

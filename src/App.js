@@ -12,7 +12,7 @@ function App() {
     <>
       <div
         style={{
-          minHeight: "calc(100vh - 2.25rem)",
+          minHeight: "calc(100vh - 1.75rem)",
         }}
       >
         <Navbar />
