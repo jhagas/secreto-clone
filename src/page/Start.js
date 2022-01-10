@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import Userpic from "./image/user.jpg";
+import Userpic from "./image/user.webp";
 import GetData from "../supabase/select";
 import UploadMsg from "../supabase/insert";
 import { Dialog, Transition } from "@headlessui/react";
@@ -132,13 +132,14 @@ function Msgbox() {
   const [data, error, loading] = GetData();
 
   useEffect(() => {
-    const scrollToBottom = () => {
+    const scrollToBottom = setTimeout(() => {
       animateScroll.scrollToBottom({
         containerId: "messages",
       });
-    };
+    },1000);
 
-    scrollToBottom();
+    return () => clearTimeout(scrollToBottom);
+
   }, [data]);
 
   if (loading) {
