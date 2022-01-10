@@ -6,7 +6,7 @@ import Dropdown from "./Dropdown";
 export default function Navbar() {
   return (
     <>
-      <nav className="sticky z-20 inset-0 overflow-hidden">
+      <nav className="sticky z-50 inset-0 overflow-hidden">
         <div className="flex justify-between items-center h-16 bg-gray-100">
           <Link
             to="/"
@@ -20,7 +20,6 @@ export default function Navbar() {
               Hub
             </span>
           </Link>
-          <Dropdown />
           <div className="pr-8 md:block hidden">
             <Link className="p-4 hover:text-orange-600" to="/about">
               About
@@ -35,6 +34,7 @@ export default function Navbar() {
               Mulai Ngerasani!
             </Link>
           </div>
+          <Dropdown />
         </div>
       </nav>
     </>

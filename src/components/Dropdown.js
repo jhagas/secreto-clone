@@ -26,8 +26,7 @@ const solutions = [
 
 export default function Dropdown() {
   return (
-    <div className="pr-8 md:hidden">
-      <Popover>
+      <Popover className="pr-8 md:hidden">
           <>
             <Popover.Button>
                 <svg className="w-6 h-6" fill="none" stroke="rgb(154 52 18)" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" /></svg>
@@ -41,7 +40,7 @@ export default function Dropdown() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute z-10 top-16 right-3 w-max px-4 mt-3">
+              <Popover.Panel className="fixed z-10 max-w-sm top-15 sm:right-3 right-0 w-max px-4 mt-3">
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
                     {solutions.map((item) => (
@@ -69,7 +68,6 @@ export default function Dropdown() {
             </Transition>
           </>
       </Popover>
-    </div>
   );
 }
 
