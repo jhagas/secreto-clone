@@ -40,7 +40,7 @@ export default function Dropdown() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="fixed z-10 max-w-sm top-15 sm:right-3 right-0 w-max px-4 mt-3">
+              <Popover.Panel className="fixed z-10 max-w-sm top-15 sm:right-3 right-1 w-max mt-4">
                 <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="relative grid gap-8 bg-white p-7 lg:grid-cols-2">
                     {solutions.map((item) => (

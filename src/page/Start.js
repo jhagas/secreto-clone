@@ -204,9 +204,12 @@ export default function Start() {
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    setHeight(PropUser.current.clientHeight);
-    setWidth(getWindowDimensions().width);
-  }, [height]);
+    const userHeight = setTimeout(() => {
+      setHeight(PropUser.current.clientHeight);
+      setWidth(getWindowDimensions().width);
+    }, 1000)
+    return () => clearTimeout(userHeight);
+  }, [PropUser, width]);
 
   return (
     <div
@@ -253,7 +256,7 @@ export default function Start() {
         <div
           className="w-full lg:ml-4 lg:mr-8 lg:py-6 pt-4 pb-0 max-h-full -translate-y-3"
           style={{
-            height: `calc(100vh - 5.75rem - 6rem - ${height}px)`,
+            height: `calc(100vh - 5.75rem - ${height}px)`,
           }}
         >
           <div className="rounded-2xl bg-white lg:px-16 px-9 py-5 shadow-lg h-full">
