@@ -1,12 +1,13 @@
 import { useRef, useEffect } from "react";
 import Userpic from "./image/user.webp";
 import GetData from "../supabase/select";
-import UploadMsg from "../supabase/insert";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import { RiLoader3Line } from "react-icons/ri";
 import { IoCloudOffline } from "react-icons/io5";
 import { animateScroll } from "react-scroll";
+import ReCAPTCHA from "react-google-recaptcha";
+import { supabase } from "../supabase/supabaseClient";
 
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -18,18 +19,41 @@ function getWindowDimensions() {
 
 function Modalmsg() {
   const msgRef = useRef(null);
-
-  let [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [msg, setMsg] = useState(null);
-  UploadMsg(msg);
+  const [token, setToken] = useState(null);
+  const [error, setError] = useState(null);
 
   function closeModal() {
     setIsOpen(false);
+    setToken(null);
+    setMsg(null);
   }
 
   function openModal() {
     setIsOpen(true);
   }
+
+  function Acc(value) {
+    setToken(value);
+  }
+
+  useEffect(() => {
+    const insert = {
+      msg: msg,
+    };
+
+    // send (INSERT) data from supabase (database) with postREST API using supabase-js
+    async function postData() {
+      const { error } = await supabase.from("form-result").insert([insert]);
+      setError(error);
+      setMsg(null);
+    }
+    // call the asyncronous function
+    if (msg != null && msg.match(/\s+/) == null && token != null) {
+      postData();
+    }
+  });
 
   const msgSend = (event) => {
     event.preventDefault();
@@ -101,14 +125,26 @@ function Modalmsg() {
                     className="mt-2 p-2 w-full shadow appearance-none rounded-md transition border border-gray-300 focus:outline-none focus:border focus:border-blue-400"
                     name="pesan"
                     ref={msgRef}
+                    required
                   />
+                  <ReCAPTCHA
+                    sitekey="6LdTKAQeAAAAAKdiv-ixzESKijlTlUUigSW6w09K"
+                    onChange={Acc}
+                  />
+                  {error != null ? <p>Error has occurred : {error}</p> : null}
                   <div className="mt-4 flex flex-row justify-end">
-                    <button
-                      type="submit"
-                      className="inline-flex mr-4 justify-center px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md hover:bg-orange-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    >
-                      Kirim
-                    </button>
+                    {token === null ? (
+                      <div className="inline-flex mr-4 justify-center px-4 py-2 text-sm font-medium text-white bg-orange-400 border border-transparent rounded-md">
+                        Kirim
+                      </div>
+                    ) : (
+                      <button
+                        type="submit"
+                        className="inline-flex mr-4 justify-center px-4 py-2 text-sm font-medium text-white bg-orange-500 border border-transparent rounded-md hover:bg-orange-700 focus:outline-none"
+                      >
+                        Kirim
+                      </button>
+                    )}
                     <button
                       type="button"
                       className="inline-flex justify-center px-4 py-2 text-sm font-medium text-orange-600 bg-orange-100 border border-transparent rounded-md hover:bg-orange-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
@@ -136,10 +172,9 @@ function Msgbox() {
       animateScroll.scrollToBottom({
         containerId: "messages",
       });
-    },1000);
+    }, 1000);
 
     return () => clearTimeout(scrollToBottom);
-
   }, [data]);
 
   if (loading) {
@@ -208,7 +243,7 @@ export default function Start() {
     const userHeight = setTimeout(() => {
       setHeight(PropUser.current.clientHeight);
       setWidth(getWindowDimensions().width);
-    }, 1000)
+    }, 1000);
     return () => clearTimeout(userHeight);
   }, [PropUser, width]);
 

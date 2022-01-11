@@ -15,7 +15,7 @@ export default function UploadMsg(message) {
       setError(error);
     }
     // call the asyncronous function
-    if (message != null) {
+    if (message != null && message !== "") {
       postData();
     }
   }, [message]);

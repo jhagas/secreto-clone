@@ -1,5 +1,5 @@
 import jhagas from "./image/jhagas.webp";
-import { IoLogoGithub, IoLogoInstagram, IoLogoLinkedin } from "react-icons/io5";
+import { IoLogoGithub, IoLogoLinkedin, IoLogoYoutube } from "react-icons/io5";
 
 export default function Contact() {
   const contact = [
@@ -14,9 +14,9 @@ export default function Contact() {
       icon: IoLogoLinkedin,
     },
     {
-      name: "Instagram",
-      link: "https://www.instagram.com/jhagashw/",
-      icon: IoLogoInstagram,
+      name: "Youtube",
+      link: "https://www.youtube.com/channel/UCjRz8R0mLG7oAsGxQkQSr4A",
+      icon: IoLogoYoutube,
     },
   ];
   return (
