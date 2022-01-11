@@ -3,7 +3,7 @@ import {
   IoLogoGithub,
   IoLogoReact,
 } from "react-icons/io5";
-import { SiNetlify, SiSupabase } from "react-icons/si";
+import { SiNetlify, SiSupabase, SiTailwindcss } from "react-icons/si";
 
 export default function About() {
   const tech = [
@@ -21,6 +21,11 @@ export default function About() {
       name: "Reactjs, frontend library",
       link: "https://create-react-app.dev/",
       logo: IoLogoReact,
+    },
+    {
+      name: "TailwindCSS",
+      link: "https://tailwindcss.com/",
+      logo: SiTailwindcss,
     },
     {
       name: "Netlify for deploying website frontend",
