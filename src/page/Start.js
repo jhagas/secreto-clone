@@ -50,7 +50,7 @@ function Modalmsg() {
       setMsg(null);
     }
     // call the asyncronous function
-    if (msg != null && msg.match(/\s+/) == null && token != null) {
+    if (msg != null && msg.match(/\s+$/) == null && token != null) {
       postData();
     }
   });
@@ -206,7 +206,7 @@ function Msgbox() {
         {data.map((d) => {
           return (
             <div
-              key={d.id}
+              key={d.created_at}
               className="my-2 px-6 rounded-xl py-3 bg-gradient-to-r from-orange-400 to-purple-400"
             >
               <p className="text-base font-medium text-white drop-shadow">
