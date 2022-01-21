@@ -6,7 +6,7 @@ import Dropdown from "./Dropdown";
 export default function Navbar() {
   return (
     <>
-      <nav className="sticky z-50 inset-0 overflow-hidden">
+      <nav className="sticky inset-0 overflow-hidden">
         <div className="flex justify-between items-center h-16 bg-gray-100">
           <Link
             to="/"

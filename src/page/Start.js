@@ -50,7 +50,7 @@ function Modalmsg() {
       setMsg(null);
     }
     // call the asyncronous function
-    if (msg != null && msg.match(/\s+$/) == null && token != null) {
+    if (msg != null && msg.match(/^\s+$/) == null && token != null) {
       postData();
     }
   });
@@ -92,7 +92,7 @@ function Modalmsg() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-80" />
+              <Dialog.Overlay className="absolute inset-0 bg-black bg-opacity-80" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
